@@ -7,15 +7,15 @@ open System.Composition
 open System.Threading
 open System.Threading.Tasks
 
-open Microsoft.CodeAnalysis
 open Microsoft.CodeAnalysis.Formatting
 open Microsoft.CodeAnalysis.Text
 open Microsoft.CodeAnalysis.CodeFixes
 open Microsoft.CodeAnalysis.CodeActions
 
-open Microsoft.FSharp.Compiler
-open Microsoft.FSharp.Compiler.Range
-open Microsoft.FSharp.Compiler.SourceCodeServices
+open FSharp.Compiler
+open FSharp.Compiler.Range
+open FSharp.Compiler.SourceCodeServices
+open FSharp.Compiler.SyntaxTree
 
 [<NoEquality; NoComparison>]
 type internal InterfaceState =
@@ -36,7 +36,7 @@ type internal FSharpImplementInterfaceCodeFixProvider
     let checker = checkerProvider.Checker
     static let userOpName = "ImplementInterfaceCodeFixProvider"
 
-    let queryInterfaceState appendBracketAt (pos: pos) (tokens: Tokenizer.SavedTokenInfo[]) (ast: Ast.ParsedInput) =
+    let queryInterfaceState appendBracketAt (pos: pos) (tokens: Tokenizer.SavedTokenInfo[]) (ast: ParsedInput) =
         asyncMaybe {
             let line = pos.Line - 1
             let! iface = InterfaceStubGenerator.tryFindInterfaceDeclaration pos ast

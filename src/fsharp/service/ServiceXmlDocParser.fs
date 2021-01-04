@@ -1,18 +1,18 @@
 // Copyright (c) Microsoft Corporation.  All Rights Reserved.  See License.txt in the project root for license information.
 
-namespace Microsoft.FSharp.Compiler.SourceCodeServices
+namespace FSharp.Compiler.SourceCodeServices
 
-open Microsoft.FSharp.Compiler
-open Microsoft.FSharp.Compiler.Text
-open Microsoft.FSharp.Compiler.AbstractIL.Internal.Library 
+open FSharp.Compiler.AbstractIL.Internal.Library
+open FSharp.Compiler.Range
+open FSharp.Compiler.SyntaxTree
+open FSharp.Compiler.Text
+open FSharp.Compiler.XmlDoc
 
 /// Represent an Xml documentation block in source code
 type XmlDocable =
     | XmlDocable of line:int * indent:int * paramNames:string list
 
 module XmlDocParsing =
-    open Microsoft.FSharp.Compiler.Range
-    open Microsoft.FSharp.Compiler.Ast
         
     let (|ConstructorPats|) = function
         | Pats ps -> ps
@@ -148,7 +148,7 @@ module XmlDocParsing =
 
         and getXmlDocablesInput input =
             match input with
-            | ParsedInput.ImplFile(ParsedImplFileInput(modules = symModules))-> 
+            | ParsedInput.ImplFile (ParsedImplFileInput (modules = symModules))-> 
                 symModules |> List.collect getXmlDocablesSynModuleOrNamespace
             | ParsedInput.SigFile _ -> []
 

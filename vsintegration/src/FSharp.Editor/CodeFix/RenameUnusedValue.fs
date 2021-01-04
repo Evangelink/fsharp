@@ -12,8 +12,8 @@ open Microsoft.CodeAnalysis.Text
 open Microsoft.CodeAnalysis.CodeFixes
 open Microsoft.CodeAnalysis.CodeActions
 
-open Microsoft.FSharp.Compiler
-open Microsoft.FSharp.Compiler.SourceCodeServices
+open FSharp.Compiler
+open FSharp.Compiler.SourceCodeServices
 
 [<ExportCodeFixProvider(FSharpConstants.FSharpLanguageName, Name = "RenameUnusedValue"); Shared>]
 type internal FSharpRenameUnusedValueCodeFixProvider
@@ -69,11 +69,7 @@ type internal FSharpRenameUnusedValueCodeFixProvider
                 match symbolUse.Symbol with
                 | :? FSharpMemberOrFunctionOrValue as func ->
                     createCodeFix(context, symbolName, SR.PrefixValueNameWithUnderscore(), TextChange(TextSpan(context.Span.Start, 0), "_"))
-
-                    if func.IsMemberThisValue then
-                        createCodeFix(context, symbolName, SR.RenameValueToDoubleUnderscore(), TextChange(context.Span, "__"))
-                    elif func.IsValue then
-                        createCodeFix(context, symbolName, SR.RenameValueToUnderscore(), TextChange(context.Span, "_"))
+                    if func.IsValue then createCodeFix(context, symbolName, SR.RenameValueToUnderscore(), TextChange(context.Span, "_"))
                 | _ -> ()
         } 
         |> Async.Ignore

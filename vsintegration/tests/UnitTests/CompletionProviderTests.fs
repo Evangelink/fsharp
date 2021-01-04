@@ -31,7 +31,7 @@ open Microsoft.CodeAnalysis.Completion
 open Microsoft.CodeAnalysis.Text
 open Microsoft.VisualStudio.FSharp.Editor
 
-open Microsoft.FSharp.Compiler.SourceCodeServices
+open FSharp.Compiler.SourceCodeServices
 open UnitTests.TestLib.LanguageService
 
 let filePath = "C:\\test.fs"
@@ -445,6 +445,14 @@ List().
     VerifyCompletionListExactly(fileContents, "List().", expected)
 
 [<Test>]
+let ``Completion for open contains namespaces and static types``() =
+    let fileContents = """
+open System.Ma
+"""
+    let expected = ["Management"; "Math"] // both namespace and static type
+    VerifyCompletionList(fileContents, "System.Ma", expected, [])
+
+[<Test>]
 let ``No completion on type name at declaration site``() =
     let fileContents = """
 type T
@@ -639,6 +647,22 @@ module Extensions =
     wrappedMessage.
 """
     VerifyCompletionList(fileContents, "wrappedMessage.", ["PrintRef"], [])
+
+
+[<Test>]
+let ``DU cases on a DU marked as RequireQualifiedAccess should not show in the completion list``() =
+    // Simulate mistyping '|>' as '|.'
+    let fileContents = """
+namespace N
+    [<RequireQualifiedAccess>]
+    type DU = A | B | C
+
+namespace global
+
+module Program =
+    let x = N.
+"""
+    VerifyCompletionList(fileContents, "N.", ["DU"], ["A"; "B"; "C"])
 
 #if EXE
 ShouldDisplaySystemNamespace()

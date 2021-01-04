@@ -24,13 +24,13 @@
 ///     class.  That is not particularly satisfactory, and it may be
 ///     a good idea to build a small library which extracts the information
 ///     you need.  
-module Microsoft.FSharp.Compiler.AbstractIL.ILBinaryReader 
+module FSharp.Compiler.AbstractIL.ILBinaryReader 
 
 open Internal.Utilities
-open Microsoft.FSharp.Compiler.AbstractIL 
-open Microsoft.FSharp.Compiler.AbstractIL.IL 
-open Microsoft.FSharp.Compiler.AbstractIL.Internal 
-open Microsoft.FSharp.Compiler.ErrorLogger
+open FSharp.Compiler.AbstractIL 
+open FSharp.Compiler.AbstractIL.IL 
+open FSharp.Compiler.AbstractIL.Internal 
+open FSharp.Compiler.ErrorLogger
 open System.IO
 
 /// Used to implement a Binary file over native memory, used by Roslyn integration
@@ -45,8 +45,6 @@ type ReduceMemoryFlag = Yes | No
 
 type ILReaderOptions =
    { pdbDirPath: string option
-
-     ilGlobals: ILGlobals
 
      // fsc.exe does not use reduceMemoryUsage (hence keeps MORE caches in AbstractIL and MORE memory mapping and MORE memory hogging but FASTER and SIMPLER file access)
      // fsi.exe does uses reduceMemoryUsage (hence keeps FEWER caches in AbstractIL and LESS memory mapping and LESS memory hogging but slightly SLOWER file access), because its long running

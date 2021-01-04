@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.  All Rights Reserved.  See License.txt in the project root for license information.
 
-module public Microsoft.FSharp.Compiler.Range
+module public FSharp.Compiler.Range
 
 open System.Text
 open System.Collections.Generic
 open Internal.Utilities
-open Microsoft.FSharp.Compiler.AbstractIL 
-open Microsoft.FSharp.Compiler.AbstractIL.Internal 
-open Microsoft.FSharp.Compiler  
+open FSharp.Compiler.AbstractIL 
+open FSharp.Compiler.AbstractIL.Internal 
+open FSharp.Compiler  
 
   
 /// An index into a global tables of filenames
@@ -43,6 +43,10 @@ val mkPos : line:int -> column:int -> pos
 
 /// Ordering on positions
 val posOrder : IComparer<pos>
+
+val unknownFileName: string
+val startupFileName: string
+val commandLineArgsFileName: string
 
 /// Represents a range within a known file
 [<Struct; CustomEquality; NoComparison>]
@@ -196,3 +200,6 @@ module Range =
 
     /// Convert a range from one-based line counting (used internally in the F# compiler and in F# error messages) to zero-based line counting (used by Visual Studio)
     val toFileZ : range -> string * Range01
+
+    /// Equality comparer for range.
+    val comparer : IEqualityComparer<range>
